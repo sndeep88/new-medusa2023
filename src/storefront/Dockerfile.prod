@@ -1,0 +1,74 @@
+FROM node:18.15.0 as base
+
+ARG NEXT_PUBLIC_MEDUSA_BACKEND_URL
+ARG NEXT_PUBLIC_MYUSER_PUBLIC_KEY
+ARG MEDUSA_BACKEND_URL
+ARG MYUSER_PUBLIC_KEY
+
+ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL=$NEXT_PUBLIC_MEDUSA_BACKEND_URL
+ENV NEXT_PUBLIC_MYUSER_PUBLIC_KEY=$NEXT_PUBLIC_MYUSER_PUBLIC_KEY
+ENV MEDUSA_BACKEND_URL=$MEDUSA_BACKEND_URL
+ENV MYUSER_PUBLIC_KEY=MYUSER_PUBLIC_KEY
+
+RUN echo ${NEXT_PUBLIC_MEDUSA_BACKEND_URL} \
+  echo ${NEXT_PUBLIC_MYUSER_PUBLIC_KEY} \
+  echo ${MEDUSA_BACKEND_URL}
+
+FROM base as builder
+
+
+WORKDIR /app/storefront
+
+COPY . . 
+
+RUN rm -rf node_modules
+
+RUN apt-get update
+
+# RUN yarn global add gatsby-cli
+
+RUN yarn add sharp
+
+RUN yarn install --frozen-lockfile
+RUN yarn build
+
+# RUN gatsby build
+
+# RUN npm i --save-dev @types/lodash
+
+# RUN npm run build
+
+# FROM nginx
+
+# EXPOSE 80
+
+# COPY --from=builder /app/storefront/public /usr/share/nginx/html
+
+# ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+# Uncomment the following line in case you want to disable telemetry during runtime.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN \
+  addgroup --system --gid 1001 nodejs; \
+  adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/storefront .
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder /app/storefront/.next/standalone ./
+COPY --from=builder /app/storefront/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 8000
+
+ENV PORT 8000
+# ENV HOSTNAME localhost
+
+CMD ["node", "server.js"]
