@@ -18,7 +18,8 @@
     "watch": "tsc --watch",
     "test": "jest",
     "seed": "medusa seed -f ./data/seed.json",
-    "start": "medusa start"
+    "start": "medusa start",
+    "dev": "medusa develop"
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.21.4",
@@ -30,7 +31,7 @@
     "@medusajs/medusa": "^1.8.0",
     "@medusajs/medusa-cli": "^1.3.9",
     "babel-preset-medusa-package": "^1.1.13",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "medusa-fulfillment-manual": "^1.1.37",

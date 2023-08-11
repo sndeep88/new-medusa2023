@@ -6,7 +6,7 @@ import {
 	PaymentSessionStatus,
 } from "@medusajs/medusa";
 
-const IDENTIFIER = "MyUserPay";
+const IDENTIFIER = "mpay";
 
 class MyUserPay extends AbstractPaymentProcessor {
 	static identifier = IDENTIFIER;
