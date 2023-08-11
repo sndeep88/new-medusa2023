@@ -91,7 +91,7 @@ const CheckoutSummary = () => {
   }
 
   return (
-    <div className="w-full lg:w-2/5 px-3 sm:px-5 lg:px-5">
+    <div className="w-full px-3 sm:px-5 md:px-10">
       {/* items */}
       <CartItems items={cart.items} region={cart.region} />
 

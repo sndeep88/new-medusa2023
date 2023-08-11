@@ -9,11 +9,11 @@ const FeaturedProducts = () => {
 
   return (
     <div className="">
-      <div className="content-container py-12">
+      <div className="px-5 sm:px-10 py-12">
         <div className="flex flex-col items-center text-center mb-16">
           <span className="text-3xl leading-6 text-gray-900">HOT SALE</span>
         </div>
-        <ul className="grid grid-cols-3 small:grid-cols-4 gap-x-4 gap-y-8">
+        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8">
           {data
             ? data.map((product) => (
                 <li key={product.id}>

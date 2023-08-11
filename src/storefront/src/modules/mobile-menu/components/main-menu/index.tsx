@@ -104,7 +104,7 @@ const MainMenu = () => {
             {!customer ? (
               <div className="flex flex-col gap-y-4">
                 <span className="text-gray-700 uppercase">Account</span>
-                <Link href={`/account/login`} passHref>
+                <Link href={`/login`} passHref>
                   <a>
                     <button
                       className="flex items-center justify-between border-b border-gray-200 py-2 w-full"

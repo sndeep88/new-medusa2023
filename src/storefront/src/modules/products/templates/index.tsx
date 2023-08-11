@@ -15,11 +15,11 @@ type ProductTemplateProps = {
 const ProductTemplate: React.FC<ProductTemplateProps> = ({ product }) => {
   const info = useRef<HTMLDivElement>(null)
 
-  const inView = useIntersection(info, "0px")
+  // const inView = useIntersection(info, "0px")
 
   return (
     <ProductProvider product={product}>
-      <div className="content-container flex flex-col gap-y-5 sm:gap-y-0 sm:flex-row sm:items-start sm:gap-x-10 py-10 relative">
+      <div className="content-container flex flex-col gap-y-5 sm:gap-y-0 md:flex-row md:items-start md:gap-x-10 py-10 relative">
         <div className="flex-1 flex flex-col gap-y-8 w-full">
           <ImageGallery images={product.images} />
         </div>

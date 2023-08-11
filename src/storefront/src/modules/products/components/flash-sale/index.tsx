@@ -1,36 +1,47 @@
 import { useEffect, useMemo, useState } from "react"
 
 export default function FlashSale() {
+  const endTime = new Date(new Date().setHours(23, 59, 59, 99))
   // countdown to the end of date
-  const [countdown, setCountdown] = useState<number>(
+  const [time, setTime] = useState(
     (() => {
-      const now = new Date()
-      const midnight = new Date(now)
-      midnight.setHours(24, 0, 0, 0)
-
-      return Math.floor(midnight.getTime() - now.getTime()) / 3600
+      return endTime.getTime()
     })()
   )
 
+  const countdown = () => {
+    var now = new Date()
+
+    var distance = time - now.getTime()
+    if (distance <= 0) {
+      setTime(0)
+      return
+    }
+    setTime(distance)
+  }
+
   useEffect(() => {
-    let interval = setInterval(() => {
-      setCountdown((prev) => prev - 1)
-    }, 1000)
+    let i = setInterval(countdown, 100)
 
     return () => {
-      clearInterval(interval)
+      clearInterval(i)
     }
   }, [])
 
   const timeLeft = useMemo(() => {
-    const hour = Math.floor(countdown / 3600)
-    const minute = Math.floor((countdown % 3600) / 60)
-    const second = Math.floor(countdown % 60)
-
-    return `${hour.toString().padStart(2, "0")} : ${minute
+    const hours = Math.floor((time / 1000 / 60 / 60) % 24)
       .toString()
-      .padStart(2, "0")} : ${second.toString().padStart(2, "0")}`
-  }, [countdown])
+      .padStart(2, "0")
+    const minutes = Math.floor((time / 1000 / 60) % 60)
+      .toString()
+      .padStart(2, "0")
+    const seconds = Math.floor((time / 1000) % 60)
+      .toString()
+      .padStart(2, "0")
+    const miliseconds = Math.floor(time % 10)
+
+    return `${hours} : ${minutes} : ${seconds}.${miliseconds}`
+  }, [time])
 
   return (
     <div className="flex w-full items-center">

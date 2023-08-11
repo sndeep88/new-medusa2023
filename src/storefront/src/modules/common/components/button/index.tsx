@@ -1,7 +1,7 @@
 import Spinner from "@modules/common/icons/spinner"
 import clsx from "clsx"
 import Link from "next/link"
-import React from "react"
+import React, { forwardRef } from "react"
 
 type ButtonProps = {
   isLoading?: boolean
@@ -9,17 +9,19 @@ type ButtonProps = {
   href?: string
 } & React.ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement>
 
-const Button = ({
-  children,
-  className,
-  isLoading = false,
-  variant = "primary",
-  href,
-  ...props
-}: ButtonProps) => {
+export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    children,
+    className,
+    isLoading = false,
+    variant = "primary",
+    href,
+    ...props
+  },
+  ref
+) {
   return (
     <button
-      {...props}
       className={clsx(
         "flex items-center justify-center px-5 py-[10px] font-medium transition-colors duration-200 disabled:opacity-50 rounded-md disabled:cursor-not-allowed text-sm",
         {
@@ -32,10 +34,10 @@ const Button = ({
         },
         className
       )}
+      {...props}
+      ref={ref}
     >
       {isLoading ? <Spinner /> : children}
     </button>
   )
-}
-
-export default Button
+})

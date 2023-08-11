@@ -4,7 +4,7 @@ import useProductPrice from "@lib/hooks/use-product-price"
 import Button from "@modules/common/components/button"
 import OptionSelect from "@modules/products/components/option-select"
 import { useRouter } from "next/router"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Product } from "types/medusa"
 import ProductBreadcrumb from "../product-breadcrumb"
 import ProductVisited from "../product-visited"
@@ -17,6 +17,7 @@ import SecurePaymentIcon from "@modules/common/icons/secure-payment"
 import FreeReturnIcon from "@modules/common/icons/free-return"
 import CarbonNeutalIcon from "@modules/common/icons/carbon-neutral"
 import FlashSale from "../flash-sale"
+import FloatingButton from "../floating-button"
 
 type ProductActionsProps = {
   product: Product
@@ -78,6 +79,30 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
   const sold = useMemo(() => {
     return Math.floor(Math.random() * 1000)
   }, [])
+
+  const buynowRef = useRef<HTMLButtonElement | null>(null)
+
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const listener = function () {
+      if (buynowRef.current) {
+        const { bottom } = buynowRef.current.getBoundingClientRect()
+
+        if (bottom < 100) {
+          setVisible(true)
+        } else {
+          setVisible(false)
+        }
+      }
+    }
+
+    window.addEventListener("scroll", listener)
+
+    return () => {
+      window.removeEventListener("scroll", listener)
+    }
+  }, [buynowRef.current])
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -156,12 +181,21 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
         {/* <Button onClick={addToCart}>
           {!inStock ? "Out of stock" : "Add to cart"}
         </Button> */}
-        <Button variant="secondary" onClick={buynow}>
+        <Button
+          variant="secondary"
+          onClick={buynow}
+          ref={buynowRef}
+          className="hover:animate-shake"
+        >
           Buy now
         </Button>
       </div>
 
-      <div className="product-desctiption pt-4">{product.description}</div>
+      <div className="product-desctiption pt-4 whitespace-pre-wrap">
+        {product.description}
+      </div>
+
+      {visible && <FloatingButton product={product} />}
     </div>
   )
 }

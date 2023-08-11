@@ -46,11 +46,11 @@ const CountrySelect = ({ name }: { name: string }) => {
 
   // const { errors } = formState
 
-  const fieldState = getFieldState("shipping_address.country_code")
+  // const fieldState = getFieldState("shipping_address.country_code")
 
-  useEffect(() => {
-    console.log({ fieldState })
-  }, [fieldState])
+  // useEffect(() => {
+  //   console.log({ fieldState })
+  // }, [fieldState])
 
   const handleCountryChange = (country: string) => {
     const isValid = isValidCountry(country)

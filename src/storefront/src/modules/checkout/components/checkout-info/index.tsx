@@ -1,37 +1,15 @@
 import Button from "@modules/common/components/button"
 
-import Image from "next/image"
-import { useStepUIContext } from "../step-wrapper"
 import ConnectForm from "@modules/common/components/connect-form"
 import { CheckoutFormValues, useCheckout } from "@lib/context/checkout-context"
 import { emailRegex } from "@lib/util/regex"
-import { useRegions } from "medusa-react"
-import { useEffect } from "react"
 import CountrySelect from "../country-select"
-import { Controller } from "react-hook-form"
 
 const CheckoutInfo = () => {
-  const { onNext } = useStepUIContext()
-
-  const { handleSubmit, setAddresses, formState } = useCheckout()
-
-  const { isDirty, isValid } = formState
   return (
     <div className="flex flex-col items-center">
-      {/* <div className="w-full flex flex-col items-center justify-center">
-        <h4 className="mb-2">Express Checkout</h4>
-
-        <Button variant="secondary" className="relative max-w-3xl">
-          <Image src="/assets/images/paypal.svg" layout="fill" />
-        </Button>
-      </div> */}
-
-      {/* <div className="border-b-2 border-gray-200 w-full my-10 text-center">
-        OR
-      </div> */}
-
       <ConnectForm<CheckoutFormValues>>
-        {({ register, control, formState: { errors, touchedFields } }) => (
+        {({ register }) => (
           <div className="flex flex-col w-full">
             {/* contact */}
             <div className="w-full flex flex-col gap-y-2 relative">
@@ -171,7 +149,7 @@ const CheckoutInfo = () => {
                     />
                   </div>
                 </div>
-                <div className="w-full my-2 flex items-center gap-x-2">
+                <div className="col-span-full w-full my-2 flex items-center gap-x-2">
                   <input type="checkbox" name="saveInfo" id="saveInfo" />
                   <span className="text-base">
                     Save my information and pay faster next time
@@ -182,21 +160,17 @@ const CheckoutInfo = () => {
           </div>
         )}
       </ConnectForm>
-      <div className="flex w-full items-center justify-end mt-4">
+      {/* <div className="flex w-full items-center justify-end mt-4">
         <Button
           variant="secondary"
           className="ml-auto"
           type="button"
-          onClick={(e) => {
-            handleSubmit(setAddresses)(e)
-              .then(onNext)
-              .catch((err) => console.log(err))
-          }}
+          onClick={handleSubmit(setAddresses)}
           disabled={!isDirty || !isValid}
         >
           Continue to Shipping
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }

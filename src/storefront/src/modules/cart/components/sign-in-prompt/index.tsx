@@ -11,7 +11,7 @@ const SignInPrompt = () => {
         </p>
       </div>
       <div>
-        <Link href="/account/login">
+        <Link href="/login">
           <a>
             <Button variant="secondary">Sign in</Button>
           </a>

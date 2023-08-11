@@ -32,7 +32,7 @@ const PaymentInfoMap: Record<string, { title: string; description: string }> = {
     title: "Test payment",
     description: "Test payment using medusa-payment-manual",
   },
-  MyUserPay: {
+  mpay: {
     title: "Credit/Debit card",
     description: "My User payment",
   },
@@ -58,7 +58,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         className={clsx("gap-x-4 divide-y divide-gray-300", {
           // "bg-blue-100": selected,
         })}
-        onClick={setSelected}
+        // onClick={setSelected}
         disabled={disabled}
       >
         <div className="w-full flex items-center text-left p-3">
@@ -123,7 +123,7 @@ const PaymentElement = ({
           <PaymentStripe />
         </div>
       )
-    case "MyUserPay":
+    case "mpay":
       return (
         <div className="">
           <PaymentMyUser setDone={setDone} />

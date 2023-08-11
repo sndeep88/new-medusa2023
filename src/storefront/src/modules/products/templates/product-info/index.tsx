@@ -1,3 +1,4 @@
+
 import ProductActions from "@modules/products/components/product-actions"
 import React from "react"
 import { Product } from "types/medusa"
@@ -14,6 +15,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           <ProductActions product={product} />
         </div>
       </div>
+
     </div>
   )
 }

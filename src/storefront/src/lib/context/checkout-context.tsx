@@ -18,7 +18,13 @@ import {
   useUpdateCart,
 } from "medusa-react"
 import { useRouter } from "next/router"
-import React, { createContext, useContext, useEffect, useMemo } from "react"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
 import { useStore } from "./store-context"
 
@@ -48,12 +54,16 @@ interface CheckoutContext {
   readyToComplete: boolean
   sameAsBilling: StateType
   editAddresses: StateType
+
+  cardElementId?: number
+
   initPayment: () => Promise<void>
   setAddresses: (addresses: CheckoutFormValues) => void
   setSavedAddress: (address: Address) => void
   setShippingOption: (soId: string) => void
   setPaymentSession: (providerId: string) => void
   onPaymentCompleted: () => void
+  setCardElementId: (id: number) => void
 }
 
 const CheckoutContext = createContext<CheckoutContext | null>(null)
@@ -99,7 +109,7 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
   const { regions } = useRegions()
 
   const { resetCart, setRegion } = useStore()
-  const { push, replace } = useRouter()
+  const { replace } = useRouter()
 
   const editAddresses = useToggleState()
   const sameAsBilling = useToggleState(
@@ -113,13 +123,11 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
    */
   const isLoading = useMemo(() => {
     return (
-      addingShippingMethod ||
-      settingPaymentSession ||
-      updatingCart ||
-      completingCheckout
+      // addingShippingMethod ||
+      settingPaymentSession || updatingCart || completingCheckout
     )
   }, [
-    addingShippingMethod,
+    // addingShippingMethod,
     completingCheckout,
     settingPaymentSession,
     updatingCart,
@@ -158,11 +166,11 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
   /**
    * Resets the form when the cart changed.
    */
-  useEffect(() => {
-    if (cart?.id) {
-      methods.reset(mapFormValues(customer, cart, countryCode))
-    }
-  }, [customer, cart, methods, countryCode])
+  // useEffect(() => {
+  //   if (cart?.id) {
+  //     methods.reset(mapFormValues(customer, cart, countryCode))
+  //   }
+  // }, [customer, cart, methods, countryCode])
 
   useEffect(() => {
     if (!cart) {
@@ -187,7 +195,7 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
       setShippingMethod(
         { option_id: soId },
         {
-          onSuccess: ({ cart }) => setCart(cart),
+          // onSuccess: ({ cart }) => setCart(cart),
         }
       )
     }
@@ -282,7 +290,8 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
   /**
    * Method that sets the addresses and email on the cart.
    */
-  const setAddresses = (data: CheckoutFormValues) => {
+  const setAddresses = async (data: CheckoutFormValues) => {
+    console.log({ data })
     const { shipping_address, billing_address, email } = data
 
     const payload: StorePostCartsCartReq = {
@@ -321,11 +330,14 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
     })
   }
 
-  // useEffect(() => {
-  //   if (cart && !cart.items.length) {
-  //     replace("/")
-  //   }
-  // }, [cart])
+  const [cardElementId, setCardElementId] = useState<number>()
+
+  useEffect(() => {
+    // console.log({ cart })
+    if (!cart?.id) {
+      replace("/")
+    }
+  }, [cart])
 
   return (
     <FormProvider {...methods}>
@@ -343,6 +355,8 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
           setShippingOption,
           setPaymentSession,
           onPaymentCompleted,
+          cardElementId,
+          setCardElementId,
         }}
       >
         <Wrapper paymentSession={cart?.payment_session}>{children}</Wrapper>

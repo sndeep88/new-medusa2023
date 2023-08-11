@@ -1,7 +1,5 @@
 import { Cart } from "@medusajs/medusa"
 import Spinner from "@modules/common/icons/spinner"
-import { useStepUIContext } from "../step-wrapper"
-import Button from "@modules/common/components/button"
 import PaymentContainer from "../payment-container"
 import { useCheckout } from "@lib/context/checkout-context"
 import Radio from "@modules/common/components/radio"
@@ -16,7 +14,6 @@ const CheckoutPayment = ({
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
 }) => {
-  const { onBack, onNext } = useStepUIContext()
   const {
     setPaymentSession,
     initPayment,
@@ -28,15 +25,20 @@ const CheckoutPayment = ({
   const [done, setDone] = useState(false)
 
   useEffect(() => {
+    initPayment()
     console.log({ cart })
-    if (cart?.payment_sessions.length && !cart.payment_session) {
-      setPaymentSession(cart.payment_sessions[0].provider_id)
+    if (
+      cart?.payment_sessions.length &&
+      !cart.payment_session &&
+      !!cart.payment_sessions.find((s) => s.provider_id === "mpay")
+    ) {
+      setPaymentSession("mpay")
     }
   }, [cart])
 
   return (
     <div>
-      <div className="border border-gray-300 rounded-md px-4 divide-y divide-gray-300">
+      {/* <div className="border border-gray-300 rounded-md px-4 divide-y divide-gray-300">
         <div className="py-3">
           <div className="w-full relative">
             <div className="span text-blue-500 underline hover:cursor-pointer absolute top-0 right-0">
@@ -94,7 +96,7 @@ const CheckoutPayment = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="my-5">
         <h4 className="text-xl font-extrabold text-gray-900">Payment</h4>
@@ -134,7 +136,9 @@ const CheckoutPayment = ({
       </div>
 
       <div className="py-5">
-        <h4 className="text-xl font-extrabold text-gray-900">Billing Address</h4>
+        <h4 className="text-xl font-extrabold text-gray-900">
+          Billing Address
+        </h4>
         <span className="text-sm text-gray-700">
           Select the address that matches your card or payment method.
         </span>
@@ -206,7 +210,7 @@ const CheckoutPayment = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between mt-4">
+      {/* <div className="flex items-center justify-between mt-4">
         <span
           onClick={onBack}
           className="return-link text-blue-500 hover:cursor-pointer"
@@ -215,7 +219,7 @@ const CheckoutPayment = ({
         </span>
 
         <PaymentButton paymentSession={cart.payment_session} done={done} />
-      </div>
+      </div> */}
     </div>
   )
 }

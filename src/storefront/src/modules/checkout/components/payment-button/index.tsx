@@ -7,6 +7,7 @@ import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useCart } from "medusa-react"
+import { useRouter } from "next/router"
 
 import React, { useEffect, useState } from "react"
 
@@ -268,6 +269,8 @@ const MyUserPaymentButton = ({
 
   const { onPaymentCompleted, cart } = useCheckout()
 
+  const { replace } = useRouter()
+
   const handlePayment = async () => {
     setSubmitting(true)
 
@@ -281,23 +284,24 @@ const MyUserPaymentButton = ({
       body: JSON.stringify({
         amount: cart?.total ?? 0,
         token,
+        cartId: cart?.id,
       }),
     })
+      .then((res) => res.json())
+      .catch((_) => undefined)
 
-    window.sessionStorage.removeItem("c_myuser_token")
+    console.log({ res })
 
-    const data = await res.json()
-    // console.log({ data })
-
-    if (!data.status) {
-      console.error(data.error)
+    if (!res.id) {
+      console.error(res)
       setSubmitting(false)
       return
     }
 
-    onPaymentCompleted()
+    window.sessionStorage.removeItem("c_myuser_token")
 
-    setSubmitting(false)
+    replace(`/order/confirmed/${res.id}`)
+    // setSubmitting(false)
   }
 
   return (

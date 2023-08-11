@@ -1,6 +1,4 @@
 import Button from "@modules/common/components/button"
-import { useStepUIContext } from "../step-wrapper"
-import { useCheckout } from "@lib/context/checkout-context"
 import Spinner from "@modules/common/icons/spinner"
 import { Controller, useForm } from "react-hook-form"
 import { formatAmount, useCart, useCartShippingOptions } from "medusa-react"
@@ -24,13 +22,11 @@ const CheckoutShipping = ({
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
 }) => {
-  const { onNext, onBack } = useStepUIContext()
-
   const { addShippingMethod, setCart } = useCart()
   const {
     control,
     setError,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<ShippingFormProps>({
     defaultValues: {
       soId: cart.shipping_methods?.[0]?.shipping_option_id,
@@ -43,14 +39,18 @@ const CheckoutShipping = ({
   })
 
   useEffect(() => {
-    refetch()
-  }, [])
+    const refetchShipping = async () => {
+      await refetch()
+    }
+
+    refetchShipping()
+  }, [cart, refetch])
 
   const submitShippingOption = (soId: string) => {
     addShippingMethod.mutate(
       { option_id: soId },
       {
-        onSuccess: ({ cart }) => setCart(cart),
+        // onSuccess: ({ cart }) => setCart(cart),
         onError: () =>
           setError(
             "soId",
@@ -91,44 +91,6 @@ const CheckoutShipping = ({
 
   return (
     <div>
-      <div className="border border-gray-300 rounded-md px-4 divide-y divide-gray-300">
-        <div className="py-3">
-          <div className="w-full relative">
-            <div className="span text-blue-500 underline hover:cursor-pointer absolute top-0 right-0">
-              Change
-            </div>
-
-            <div className="flex flex-col md:flex-row md:items-center gap-y-3">
-              <h4 className="w-full md:w-2/12">Contact</h4>
-              <p className="flex-1">{cart?.email}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="py-3">
-          {cart && cart.shipping_address ? (
-            <div className="w-full relative">
-              <div className="span text-blue-500 underline hover:cursor-pointer absolute top-0 right-0">
-                Change
-              </div>
-
-              <div className="flex flex-col md:flex-row md:items-center gap-y-3">
-                <h4 className="w-full md:w-2/12">Ship to</h4>
-                <p className="flex-1">
-                  {cart.shipping_address.address_1},{" "}
-                  {cart.shipping_address.city},{" "}
-                  {cart.shipping_address.country?.display_name}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="">
-              <Spinner />
-            </div>
-          )}
-        </div>
-      </div>
-
       <div className="my-5">
         <h4 className="text-xl tracking-wider">Shipping Method</h4>
 
@@ -178,7 +140,7 @@ const CheckoutShipping = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between mt-4">
+      {/* <div className="flex items-center justify-between mt-4">
         <span
           onClick={onBack}
           className="return-link text-blue-500 hover:cursor-pointer"
@@ -194,7 +156,7 @@ const CheckoutShipping = ({
         >
           Continue to payment
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }
