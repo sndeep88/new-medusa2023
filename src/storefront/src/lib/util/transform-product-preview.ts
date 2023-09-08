@@ -21,6 +21,8 @@ const transformProductPreview = (
     }, variants[0])
   }
 
+  // console.log({ cheapestVariant })
+
   return {
     id: product.id,
     title: product.title,
@@ -43,6 +45,12 @@ const transformProductPreview = (
             cheapestVariant.calculated_price
           ),
           price_type: cheapestVariant.calculated_price_type,
+          diff_amount: formatAmount({
+            amount:
+              cheapestVariant.original_price - cheapestVariant.calculated_price,
+            region: region,
+            includeTaxes: false,
+          }),
         }
       : undefined,
   }

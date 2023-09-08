@@ -1,12 +1,13 @@
 export default function ProductVisited({ visited }: { visited: number }) {
   return (
-    <div className="py-2 px-3 flex items-center gap-x-2 rounded-md bg-orange-50">
+    <div className="visitor-box">
       <svg
         width="1.15em"
         height="1.15em"
         viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        className="inline max-w-full h-auto box-border"
       >
         <path
           d="M7.99995 5.4001C6.56401 5.4001 5.39995 6.56416 5.39995 8.0001C5.39995 9.43604 6.56401 10.6001 7.99995 10.6001C9.43589 10.6001 10.6 9.43604 10.6 8.0001C10.6 6.56416 9.43589 5.4001 7.99995 5.4001ZM6.59995 8.0001C6.59995 7.2269 7.22675 6.6001 7.99995 6.6001C8.77315 6.6001 9.39995 7.2269 9.39995 8.0001C9.39995 8.7733 8.77315 9.4001 7.99995 9.4001C7.22675 9.4001 6.59995 8.7733 6.59995 8.0001Z"
@@ -17,8 +18,8 @@ export default function ProductVisited({ visited }: { visited: number }) {
           fill="currentColor"
         ></path>
       </svg>
-      <span>{visited}</span>
-      <span>Visitors are browsing our store.</span>
+      <span className="visitor">{visited}</span>
+      <span className="visitor-info">Visitors are browsing our store.</span>
     </div>
   )
 }

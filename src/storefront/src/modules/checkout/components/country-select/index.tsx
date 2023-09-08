@@ -85,7 +85,7 @@ const CountrySelect = ({ name }: { name: string }) => {
               <Combobox.Input
                 onChange={(event) => setQuery(event.target.value)}
                 className={clsx(
-                  "w-full rounded-md px-3 py-2 border border-gray-300"
+                  "w-full rounded-md px-4 py-2 border border-gray-300 text-base-regular"
                 )}
                 displayValue={(country: any) => country?.label ?? query}
               />

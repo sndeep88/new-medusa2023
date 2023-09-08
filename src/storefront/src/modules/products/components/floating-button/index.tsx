@@ -31,45 +31,42 @@ export default function FloatingButton({ product }: { product: Product }) {
   }
 
   return (
-    <div className="fixed left-0 bottom-0 z-10 w-full hidden md:block">
-      <div className="bg-checkout relative px-5 py-3 flex items-center gap-x-5 shadow-floating">
-        <div className="w-24 flex items-center relative aspect-square">
-          <Image
-            src={product.thumbnail ?? ""}
-            layout="fill"
-            objectFit="cover"
-            priority={true}
-            className="absolute inset-0"
-            alt={`Product image`}
-          />
-        </div>
-        <div className="flex-1 flex items-center">
-          <h4 className="font-bold text-sm md:text-base lg:text-xl">
-            {product.title}
-          </h4>
-        </div>
-        <div className="ml-auto h-full">
-          {selectedPrice ? (
-            <div className="flex items-center">
-              <span className="text-2xl font-bold text-red-500">
-                {selectedPrice.calculated_price}
-              </span>
-              {selectedPrice.price_type === "sale" ? (
-                <span className="ml-2 text-lg line-through text-gray-500">
-                  {selectedPrice.original_price}
-                </span>
-              ) : null}
+    <div className="stickyBtn fixed bottom-0 inset-x-0">
+      <div className="container-fluid ps-0 pe-0 ps-md-4 pe-md-4">
+        <div className="row">
+          <div className="col-6 col-lg-7 d-none d-md-block">
+            <div className="d-flex align-items-center">
+              <div className="me-3 thumbnail w-[68px] flex items-center relative aspect-square">
+                <Image
+                  src={product.thumbnail ?? ""}
+                  layout="fill"
+                  objectFit="cover"
+                  priority={true}
+                  className="absolute inset-0"
+                  alt={`Product image`}
+                />
+              </div>
+
+              <h4 className="m-0 text-truncate">{product.title}</h4>
             </div>
-          ) : null}
-        </div>
-        <div className="ml-5">
-          <Button
-            variant="primary"
-            onClick={buynow}
-            className="!py-3 !px-8 !rounded !text-lg"
-          >
-            Buy now
-          </Button>
+          </div>
+          <div className="col-6 col-lg-5 text-end d-flex align-items-center justify-content-end">
+            {selectedPrice ? (
+              <div className="product-item-price  d-none d-md-block">
+                <span className="product-price">
+                  {selectedPrice.calculated_price}
+                </span>
+                {selectedPrice.price_type === "sale" ? (
+                  <span className="line-through text-gray-500">
+                    {selectedPrice.original_price}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+            <a onClick={buynow} className="btn btn-secondary ms-0 ms-md-3 rounded">
+              Buy Now
+            </a>
+          </div>
         </div>
       </div>
     </div>

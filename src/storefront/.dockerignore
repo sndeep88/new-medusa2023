@@ -1,0 +1,9 @@
+.env.*
+
+node_modules/
+
+.next/
+.build.log
+
+Dockerfile
+Dockerfile.*

@@ -355,5 +355,6 @@ module.exports = {
       strategy: "class",
     }),
     require("tailwindcss-radix")(),
+    require("@tailwindcss/typography")
   ],
 }

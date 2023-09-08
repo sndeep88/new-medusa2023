@@ -27,6 +27,7 @@ interface StoreContext {
   updateItem: (item: LineInfoProps) => void
   deleteItem: (lineId: string) => void
   resetCart: () => void
+  setCart: (cartId: string) => void
 
   // buynow
   createBuynowCart: () => Promise<void>
@@ -258,6 +259,30 @@ export const StoreProvider = ({ children }: StoreProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const setUnpaidCart = async (cartId: string) => {
+    deleteCart()
+    storeCart(cartId)
+
+    const cartRes = await medusaClient.carts
+      .retrieve(cartId)
+      .then(({ cart }) => {
+        return cart
+      })
+      .catch(async (_) => {
+        return null
+      })
+
+    if (!cartRes || cartRes.completed_at) {
+      deleteCart()
+      deleteRegion()
+      await createNewCart()
+      return
+    }
+
+    setCart(cartRes)
+    ensureRegion(cartRes.region)
+  }
+
   const addItem = ({
     variantId,
     quantity,
@@ -351,6 +376,7 @@ export const StoreProvider = ({ children }: StoreProps) => {
         addItem,
         deleteItem,
         updateItem,
+        setCart: setUnpaidCart,
         resetCart,
         // buynow
         createBuynowCart,

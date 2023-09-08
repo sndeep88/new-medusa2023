@@ -16,11 +16,10 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
 
-          {/* <link href="/assets/css/bootstrap.min.css" rel="stylesheet" /> */}
-
+          <link href="../styles/global.css" rel="stylesheet" />
+          <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+          <link href="/assets/css/uikit.min.css" rel="stylesheet" />
           <link href="/assets/css/style.css" rel="stylesheet" />
-
-          {/* <link rel="stylesheet" href="/assets/css/uikit.min.css" /> */}
         </Head>
         <body>
           <Main />

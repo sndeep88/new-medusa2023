@@ -21,7 +21,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative px-[10px]">
       {/* <div className="hidden small:flex flex-col gap-y-4 sticky top-20">
         {images.map((image, index) => {
           return (

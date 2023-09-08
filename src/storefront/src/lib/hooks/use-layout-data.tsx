@@ -95,6 +95,13 @@ const fetchFeaturedProducts = async (
                 cheapestVariant.calculated_price
               ),
               price_type: cheapestVariant.calculated_price_type,
+              diff_amount: formatAmount({
+                amount:
+                  cheapestVariant.original_price -
+                  cheapestVariant.calculated_price,
+                region: region,
+                includeTaxes: false,
+              }),
             }
           : {
               calculated_price: "N/A",
@@ -102,6 +109,7 @@ const fetchFeaturedProducts = async (
               difference: "N/A",
               price_type: "default",
             },
+        variant: cheapestVariant,
       }
     })
 }

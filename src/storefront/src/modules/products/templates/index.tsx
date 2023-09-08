@@ -10,28 +10,36 @@ import MobileActions from "../components/mobile-actions"
 
 type ProductTemplateProps = {
   product: Product
+  prodDesc: any
 }
 
-const ProductTemplate: React.FC<ProductTemplateProps> = ({ product }) => {
+const ProductTemplate: React.FC<ProductTemplateProps> = ({
+  product,
+  prodDesc,
+}) => {
   const info = useRef<HTMLDivElement>(null)
 
   // const inView = useIntersection(info, "0px")
 
   return (
     <ProductProvider product={product}>
-      <div className="content-container flex flex-col gap-y-5 sm:gap-y-0 md:flex-row md:items-start md:gap-x-10 py-10 relative">
-        <div className="flex-1 flex flex-col gap-y-8 w-full">
-          <ImageGallery images={product.images} />
+      <section>
+        <div className="container-fluid">
+          <div className="row product-image">
+            <div className="col-md-6 mb-2 mb-md-4">
+              <ImageGallery images={product.images} />
+            </div>
+            <div className="col-md-6 mb-4" ref={info}>
+              <ProductInfo product={product} prodDesc={prodDesc} />
+              {/* <ProductTabs product={product} /> */}
+            </div>
+          </div>
+          {/* <div className="content-container my-16 px-6 small:px-8 small:my-32">
+            <RelatedProducts product={product} />
+          </div> */}
+          {/* <MobileActions product={product} show={!inView} /> */}
         </div>
-        <div className="flex-1 flex flex-col " ref={info}>
-          <ProductInfo product={product} />
-          {/* <ProductTabs product={product} /> */}
-        </div>
-      </div>
-      {/* <div className="content-container my-16 px-6 small:px-8 small:my-32">
-        <RelatedProducts product={product} />
-      </div> */}
-      {/* <MobileActions product={product} show={!inView} /> */}
+      </section>
     </ProductProvider>
   )
 }

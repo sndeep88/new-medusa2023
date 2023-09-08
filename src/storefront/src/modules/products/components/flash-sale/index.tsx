@@ -39,19 +39,22 @@ export default function FlashSale() {
       .toString()
       .padStart(2, "0")
     const miliseconds = Math.floor(time % 10)
+      .toString()
+      .padStart(2, "0")
 
-    return `${hours} : ${minutes} : ${seconds}.${miliseconds}`
+    return `${hours}:${minutes}:${seconds}.${miliseconds}`
   }, [time])
 
   return (
-    <div className="flex w-full items-center">
-      <div className="inline-flex items-center w-full bg-gradient-to-r from-orange-500 to-pink-600 p-3 text-white font-extrabold">
-        <span className="flex-1 w-full">Flash sale end in </span>
-        <span className="bg-white rounded py-1 ml-auto text-pink-600 px-2 leading-3 font-[900]">
-          {/* 00 : 00 : 00
-          {countdown} */}
-          {timeLeft}
-        </span>
+    <div className="countdown d-none d-md-block">
+      <span className="sale-label">Hurry up! Sale Ends in</span>
+      <div
+        style={{
+          direction: "ltr",
+        }}
+        className="timeout_isolate"
+      >
+        {timeLeft}
       </div>
     </div>
   )

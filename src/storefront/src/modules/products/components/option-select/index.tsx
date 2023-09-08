@@ -23,11 +23,9 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
   // }, [current])
 
   return (
-    <div className="flex flex-col gap-y-3">
-      <span className="text-xl text-gray-900 font-semibold">
-        Select {title}
-      </span>
-      <div className="flex flex-wrap items-center justify-start gap-2">
+    <>
+      <h5 className="prod-lable">Select {title}</h5>
+      <div className="varient-options">
         {filteredOptions.map((v) => {
           return (
             <button
@@ -35,17 +33,14 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
                 updateOption({ [option.id]: v })
               }}
               key={v}
-              className={clsx(
-                "px-4 py-2 border-2 border-gray-200 rounded-full text-gray-800 transition-all duration-200 hover:bg-gray-200",
-                v === current && " !border-gray-900 font-semibold"
-              )}
+              className={clsx("varient-items", v === current && "active")}
             >
               {v}
             </button>
           )
         })}
       </div>
-    </div>
+    </>
   )
 }
 

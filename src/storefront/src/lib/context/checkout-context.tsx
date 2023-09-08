@@ -47,6 +47,13 @@ export type CheckoutFormValues = {
   email: string
 }
 
+export type CardInfomation = {
+  card_number: string
+  card_expDate: string
+  card_cvc: string
+  card_name: string
+}
+
 interface CheckoutContext {
   cart?: Omit<Cart, "refundable_amount" | "refunded_total">
   shippingMethods: { label: string; value: string; price: string }[]
@@ -64,6 +71,7 @@ interface CheckoutContext {
   setPaymentSession: (providerId: string) => void
   onPaymentCompleted: () => void
   setCardElementId: (id: number) => void
+  setCardInformation: (card: CardInfomation) => void
 }
 
 const CheckoutContext = createContext<CheckoutContext | null>(null)
@@ -90,6 +98,15 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
 
   const methods = useForm<CheckoutFormValues>({
     defaultValues: mapFormValues(customer, cart, countryCode),
+    reValidateMode: "onChange",
+  })
+  const cardMethods = useForm<CardInfomation>({
+    defaultValues: {
+      card_number: "",
+      card_expDate: "",
+      card_cvc: "",
+      card_name: "",
+    },
     reValidateMode: "onChange",
   })
 
@@ -291,7 +308,7 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
    * Method that sets the addresses and email on the cart.
    */
   const setAddresses = async (data: CheckoutFormValues) => {
-    console.log({ data })
+    // console.log({ data })
     const { shipping_address, billing_address, email } = data
 
     const payload: StorePostCartsCartReq = {
@@ -339,28 +356,33 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
     }
   }, [cart])
 
+  const setCardInformation = (card: CardInfomation) => {}
+
   return (
     <FormProvider {...methods}>
-      <CheckoutContext.Provider
-        value={{
-          cart,
-          shippingMethods,
-          isLoading,
-          readyToComplete,
-          sameAsBilling,
-          editAddresses,
-          initPayment,
-          setAddresses,
-          setSavedAddress,
-          setShippingOption,
-          setPaymentSession,
-          onPaymentCompleted,
-          cardElementId,
-          setCardElementId,
-        }}
-      >
-        <Wrapper paymentSession={cart?.payment_session}>{children}</Wrapper>
-      </CheckoutContext.Provider>
+      <FormProvider {...cardMethods}>
+        <CheckoutContext.Provider
+          value={{
+            cart,
+            shippingMethods,
+            isLoading,
+            readyToComplete,
+            sameAsBilling,
+            editAddresses,
+            initPayment,
+            setAddresses,
+            setSavedAddress,
+            setShippingOption,
+            setPaymentSession,
+            onPaymentCompleted,
+            cardElementId,
+            setCardElementId,
+            setCardInformation,
+          }}
+        >
+          <Wrapper paymentSession={cart?.payment_session}>{children}</Wrapper>
+        </CheckoutContext.Provider>
+      </FormProvider>
     </FormProvider>
   )
 }

@@ -47,7 +47,7 @@ const Nav = () => {
 
   useEffect(() => {
     const fixed = () => {
-      if (window.scrollY > 150) {
+      if (window.scrollY > 200) {
         setFixedNav(true)
       } else {
         setFixedNav(false)
@@ -62,13 +62,18 @@ const Nav = () => {
   }, [setFixedNav])
 
   return (
-    <header className={clsx(fixedNav ? "fixed" : "")}>
+    <header>
       <div className="annoncement-bar text-center">
         🚚 FREE SHIPPING on Orders Over $ 39/€ 36
       </div>
 
-      <nav className="navbar navbar-expand-md navbar-light bg-white">
-        <div className="px-5 flex items-center justify-between mx-auto max-w-7xl lg:max-w-[95vw] lg:px-10 py-4">
+      <nav
+        className={clsx(
+          "navbar navbar-expand-md navbar-light bg-white",
+          fixedNav ? "fixed inset-x-0 z-20 top-0" : ""
+        )}
+      >
+        <div className="container-fluid">
           <Link href="/">
             <a className="navbar-brand">
               Shopping
@@ -77,7 +82,7 @@ const Nav = () => {
           </Link>
 
           {/* navbar icons */}
-          <div className="order-3 flex items-center gap-x-3 md:hidden">
+          <div className="d-block d-md-none md:hidden">
             {/* <a className="srchbtn">
               <svg
                 className=""
@@ -138,7 +143,7 @@ const Nav = () => {
             </button>
           </div>
 
-          <div className="hidden md:flex justify-between items-end h-full flex-1">
+          <div className="collapse navbar-collapse">
             {/* mobile navbar */}
             <div className="md:hidden">
               <a href="#">
@@ -173,29 +178,20 @@ const Nav = () => {
               </button>
             </div>
 
-            <ul className="flex items-center">
-              <li className="text-gray-900/60 hover:text-gray-900  px-4">
+            <ul className="navbar-nav me-auto pt-[20px]">
+              <li className="nav-item">
                 <Link href="/">
-                  <span className="px-2 py-1 hover:cursor-pointer">Home</span>
+                  <a className="nav-link">Home</a>
                 </Link>
               </li>
-              {/* <li className="text-gray-900/60 hover:text-gray-900">
-                <Link href="/collections">
-                  <span className="px-2 py-1 hover:cursor-pointer">
-                    Collection
-                  </span>
-                </Link>
-              </li> */}
-              <li className="text-gray-900/60 hover:text-gray-900 px-4">
+              <li className="nav-item">
                 <Link href="/products">
-                  <span className="px-2 py-1 hover:cursor-pointer">
-                    All Products
-                  </span>
+                  <a className="nav-link">All Products</a>
                 </Link>
               </li>
             </ul>
 
-            <div className="flex header-right">
+            <div className="d-flex header-right">
               {/* currency change */}
               {/* <div className="btn-group">
                 <button
@@ -410,7 +406,7 @@ const Nav = () => {
 
               {/* cart*/}
               <Link href="/cart">
-                <span className="header-cart d-none d-md-block">
+                <a className="header-cart d-none d-md-block">
                   <svg
                     width="28"
                     height="28"
@@ -434,7 +430,7 @@ const Nav = () => {
                     ></path>
                   </svg>
                   <span className="item-count">{cart?.items.length ?? 0}</span>
-                </span>
+                </a>
               </Link>
             </div>
           </div>

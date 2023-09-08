@@ -1,6 +1,6 @@
 export default function ProductStock() {
   return (
-    <div className="flex items-center gap-x-3 text-sm">
+    <div className="stockBox_item">
       <svg
         width="1.15em"
         height="1.15em"
@@ -13,8 +13,11 @@ export default function ProductStock() {
           fill="currentColor"
         ></path>
       </svg>
-
-      <span>Only 5 left in stock</span>
+      <div>
+        <span className="undefined">Only</span>
+        <span className="number notranslate"> 5 </span>
+        <span className="undefined">left in stock</span>
+      </div>
     </div>
   )
 }

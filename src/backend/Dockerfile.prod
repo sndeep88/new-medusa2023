@@ -10,18 +10,20 @@ RUN apt-get update
 
 RUN apt-get install -y python
 
-RUN npm install -g npm@latest
+# RUN npm install -g npm@latest
 
 RUN npm install --loglevel=error
 
 RUN npm run build
 
+# RUN echo $(ls -1 /app/medusa)
+# RUN echo $(ls -1 /app/medusa/dist)
 
-FROM node:18.5.0
+FROM node:18.5.0 as production
 
 WORKDIR /app/medusa
 
-RUN mkdir dist
+# RUN mkdir dist
 
 COPY package*.json ./ 
 
@@ -40,7 +42,7 @@ RUN npm install -g @medusajs/medusa-cli
 
 RUN npm i --only=production
 
-COPY --from=builder /app/medusa/dist ./dist
+COPY --from=builder /app/medusa/dist/* ./dist
 
 EXPOSE 9000
 

@@ -18,9 +18,11 @@ import FreeReturnIcon from "@modules/common/icons/free-return"
 import CarbonNeutalIcon from "@modules/common/icons/carbon-neutral"
 import FlashSale from "../flash-sale"
 import FloatingButton from "../floating-button"
+import ProductDesc from "../product-description"
 
 type ProductActionsProps = {
   product: Product
+  prodDesc: any
 }
 
 const sellInfo: {
@@ -45,7 +47,10 @@ const sellInfo: {
   },
 ]
 
-const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
+const ProductActions: React.FC<ProductActionsProps> = ({
+  product,
+  prodDesc,
+}) => {
   const { updateOptions, addToCart, options, inStock, variant } =
     useProductActions()
 
@@ -56,10 +61,6 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
 
     return variantPrice || cheapestPrice || null
   }, [price])
-
-  // useEffect(() => {
-  //   console.log({ selectedPrice })
-  // }, [selectedPrice])
 
   const { createBuynowCart } = useStore()
   const router = useRouter()
@@ -105,7 +106,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
   }, [buynowRef.current])
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="product-detail-content">
       {/* {product.collection && (
         <Link href={`/collections/${product.collection.id}`}>
           <a className="text-small-regular text-gray-700">
@@ -118,22 +119,22 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
 
       <ProductVisited visited={visited} />
 
-      <h3 className="text-xl-regular">{product.title}</h3>
+      <h2 className="section-title text-start mb-2">{product.title}</h2>
 
       <ProductSold sold={sold} />
 
       {selectedPrice ? (
-        <div className="flex items-center mt-2">
+        <div className="product-item-price pt-2">
           {selectedPrice.percentage_diff !== "0" ? (
-            <span className="badge bg-secondary font-bold text-white py-0.5 px-3 mr-2 ">
-              Save {selectedPrice.percentage_diff}%
+            <span className="badge bg-secondary me-2">
+              Save {selectedPrice.diff_amount}
             </span>
           ) : null}
           <span className="product-price">
             {selectedPrice.calculated_price}
           </span>
           {selectedPrice.price_type === "sale" ? (
-            <span className="ml-2 line-through text-gray-500">
+            <span className="line-through text-gray-500">
               {selectedPrice.original_price}
             </span>
           ) : null}
@@ -144,10 +145,10 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
       <FlashSale />
 
       {product.variants.length > 1 && (
-        <div className="my-8 flex flex-col gap-y-6">
+        <div className="varients">
           {product.options.map((option) => {
             return (
-              <div key={option.id}>
+              <div key={option.id} className="varient pt-4">
                 <OptionSelect
                   option={option}
                   current={options[option.id]}
@@ -160,39 +161,36 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
         </div>
       )}
 
-      <div className="my-3">
-        <h4 className="mb-2 text-xl tracking-wide">Quantity</h4>
-
+      <div id="field1" className="mt-4">
+        <h5 className="prod-lable">Quantity</h5>
         <Quantity />
       </div>
 
-      <div className="flex flex-col gap-y-3 mb-2">
+      <div className="product-sell-info shopline-element-sell-info pt-4">
         {sellInfo.map(({ icon: Icon, label }, idx) => (
-          <div className="flex items-center gap-x-3" key={idx}>
-            <Icon />
-            <span className=" text-gray-900">{label}</span>
+          <div className="product-sell-box" key={idx}>
+            <div className="product-sell-icon">
+              <Icon size={24} />
+            </div>
+            <div className=" product-sell-text body3">{label}</div>
           </div>
         ))}
       </div>
 
       <ProductStock />
 
-      <div className="flex flex-col gap-y-5 mt-3">
-        {/* <Button onClick={addToCart}>
-          {!inStock ? "Out of stock" : "Add to cart"}
-        </Button> */}
-        <Button
-          variant="secondary"
+      <div className="text-center mt-2 mt-md-4">
+        <button
           onClick={buynow}
           ref={buynowRef}
-          className="hover:animate-shake"
+          className="btn btn-primary w-100"
         >
           Buy now
-        </Button>
+        </button>
       </div>
 
-      <div className="product-desctiption pt-4 whitespace-pre-wrap">
-        {product.description}
+      <div className="product-description pt-3">
+        <ProductDesc prodDesc={prodDesc} product={product} />
       </div>
 
       {visible && <FloatingButton product={product} />}

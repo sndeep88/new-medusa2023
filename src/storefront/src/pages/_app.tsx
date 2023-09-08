@@ -5,15 +5,37 @@ import { MobileMenuProvider } from "@lib/context/mobile-menu-context"
 import { StoreProvider } from "@lib/context/store-context"
 import { Hydrate } from "@tanstack/react-query"
 import { CartProvider, MedusaProvider } from "medusa-react"
+import { useRouter } from "next/router"
 import Script from "next/script"
+import { useEffect, useState } from "react"
 import "styles/globals.css"
 import { AppPropsWithLayout } from "types/global"
+import * as fbp from "lib/pixel"
 
 function App({
   Component,
   pageProps,
 }: AppPropsWithLayout<{ dehydratedState?: unknown }>) {
   const getLayout = Component.getLayout ?? ((page) => page)
+
+  const [loaded, setLoaded] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loaded) return
+
+    fbp.pageview()
+
+    const handleRouteChange = () => {
+      fbp.pageview()
+    }
+
+    router.events.on("routeChangeComplete", handleRouteChange)
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange)
+    }
+  }, [router.events, loaded])
 
   return (
     <>
@@ -38,17 +60,15 @@ function App({
         </Hydrate>
       </MedusaProvider>
 
-      {/* <Script src="/assets/js/jquery.min.js" />
-      <Script src="/assets/js/bootstrap.bundle.min.js" />
-
-      <Script src="/assets/js/uikit.min.js" />
-      <Script src="/assets/js/uikit-icons.min.js" />
-
-      <Script src="/assets/js/custom.js" /> */}
       <Script src="https://api.myuser.com/js/checkout.js" />
 
-      {/* <Script src="/myuser.js" defer /> */}
-      {/* <Script>{`window.MyUserPay = MyUserPay`}</Script> */}
+      <Script
+        id="fb-pixels"
+        src="/scripts/pixel.js"
+        strategy="afterInteractive"
+        onLoad={() => setLoaded(true)}
+        data-pixel-ids={process.env.NEXT_PUBLIC_FB_PIXELS ?? ""}
+      />
     </>
   )
 }

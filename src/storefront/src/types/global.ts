@@ -2,6 +2,7 @@ import { Product } from "@medusajs/medusa"
 import { NextPage } from "next"
 import { AppProps } from "next/app"
 import { ReactElement, ReactNode } from "react"
+import { CalculatedVariant } from "./medusa"
 
 export type CollectionData = {
   id: string
@@ -58,7 +59,9 @@ export type ProductPreviewType = {
     original_price: string
     difference: string
     price_type: "default" | "sale"
+    diff_amount: string
   }
+  variant?: CalculatedVariant
 }
 
 export type InfiniteProductPage = {

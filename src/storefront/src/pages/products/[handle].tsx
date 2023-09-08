@@ -22,6 +22,13 @@ const fetchProduct = async (handle: string) => {
     .then(({ products }) => products[0])
 }
 
+const fetchProductDesc = async (handle: string) => {
+  return await medusaClient.client.request(
+    "GET",
+    `/store/product/description/${handle}`
+  )
+}
+
 const ProductPage: NextPageWithLayout<PrefetchedPageProps> = ({ notFound }) => {
   const { query, isFallback, replace } = useRouter()
   const handle = typeof query.handle === "string" ? query.handle : ""
@@ -29,6 +36,15 @@ const ProductPage: NextPageWithLayout<PrefetchedPageProps> = ({ notFound }) => {
   const { data, isError, isLoading, isSuccess } = useQuery(
     [`get_product`, handle],
     () => fetchProduct(handle),
+    {
+      enabled: handle.length > 0,
+      keepPreviousData: true,
+    }
+  )
+
+  const { data: descData } = useQuery(
+    ["get_product_desc", handle],
+    () => fetchProductDesc(handle),
     {
       enabled: handle.length > 0,
       keepPreviousData: true,
@@ -60,7 +76,7 @@ const ProductPage: NextPageWithLayout<PrefetchedPageProps> = ({ notFound }) => {
           image={data.thumbnail}
         />
         {/* @ts-ignore */}
-        <ProductTemplate product={data} />
+        <ProductTemplate product={data} prodDesc={descData} />
       </>
     )
   }

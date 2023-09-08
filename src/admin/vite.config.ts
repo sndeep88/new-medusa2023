@@ -38,6 +38,7 @@ export default defineConfig({
       env.GATSBY_MEDUSA_BACKEND_URL ||
       env.GATSBY_STORE_URL ||
       "https://backend-medusa.lamvieconha.com"
+      // "http://localhost:9000"
     ),
   },
   optimizeDeps: {
@@ -47,5 +48,5 @@ export default defineConfig({
     host: true,
     // host: '0.0.0.0',
     port: 7000,
-  }
+  },
 })

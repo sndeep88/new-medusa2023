@@ -46,65 +46,62 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   setDone,
 }) => {
   return (
-    <div
-      className={clsx(
-        "flex flex-col gap-y-4 border border-gray-200 rounded-md ",
-        {
-          "bg-gray-50": selected,
-        }
-      )}
-    >
-      <button
-        className={clsx("gap-x-4 divide-y divide-gray-300", {
-          // "bg-blue-100": selected,
-        })}
-        // onClick={setSelected}
-        disabled={disabled}
-      >
-        <div className="w-full flex items-center text-left p-3">
-          <h3 className="leading-none text-gray-900">
-            {PaymentInfoMap[paymentSession.provider_id].title}
-          </h3>
+    <div className={clsx("pay-item active")}>
+      <div className="pay_label w-full inline-flex items-center relative">
+        <span className="absolute w-10 top-1/2 left-4 -translate-y-1/2">
+          <Radio checked={selected} />
+        </span>
+        <label className="flex-1 d-flex align-items-center justify-content-between flex-wrap">
+          <span>Credit Card</span>
 
-          <div className="ml-auto flex items-center gap-x-2">
-            <Image
-              src="/assets/images/visa.svg"
-              alt="visa"
-              width={40}
-              height={30}
-            />
-            <Image
-              src="/assets/images/master.svg"
-              alt="master"
-              width={40}
-              height={30}
-            />
+          <div className="payment-icon text-md-end inline-flex items-center gap-x-1 ">
             <Image
               src="/assets/images/american_express.svg"
               alt="samerican_express"
-              width={40}
-              height={30}
+              height={22}
+              width={35}
+            />
+            <Image
+              src="/assets/images/diners_club.svg"
+              alt="diners_club"
+              height={22}
+              width={35}
             />
             <Image
               src="/assets/images/discover.svg"
               alt="discover"
-              width={40}
-              height={30}
+              height={22}
+              width={35}
             />
-            <span className="text-sm text-gray-500">and more...</span>
+            <Image
+              src="/assets/images/jcb.svg"
+              alt="jcb"
+              height={22}
+              width={35}
+            />
+            <Image
+              src="/assets/images/master.svg"
+              alt="master"
+              height={22}
+              width={35}
+            />
+            <Image
+              src="/assets/images/visa.svg"
+              alt="visa"
+              height={22}
+              width={35}
+            />
           </div>
+        </label>
+      </div>
+      {selected && (
+        <div
+          className={clsx("text-center pay-content p-3")}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <PaymentElement paymentSession={paymentSession} setDone={setDone} />
         </div>
-        {selected && (
-          <div
-            className={clsx("w-full bg-slate-200 py-3 px-4", {
-              ["hidden "]: !selected,
-            })}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <PaymentElement paymentSession={paymentSession} setDone={setDone} />
-          </div>
-        )}
-      </button>
+      )}
     </div>
   )
 }
@@ -125,9 +122,9 @@ const PaymentElement = ({
       )
     case "mpay":
       return (
-        <div className="">
+        <>
           <PaymentMyUser setDone={setDone} />
-        </div>
+        </>
       )
     case "manual":
       // We only display the test payment form if we are in a development environment

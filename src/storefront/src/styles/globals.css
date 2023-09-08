@@ -35,7 +35,7 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #212121;
+    border: 1px solid #d1d5db;
     -webkit-text-fill-color: #212121;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset;
     transition: background-color 5000s ease-in-out 0s;
@@ -110,3 +110,14 @@
     @apply text-[36px] leading-[48px] font-semibold;
   }
 }
+
+body {
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  font-family: "Assistant";
+}
+
+.collapse {
+  visibility: visible;
+}
+

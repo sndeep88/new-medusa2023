@@ -14,6 +14,7 @@ const Home: NextPageWithLayout = () => {
       />
       <Hero />
       <FeaturedProducts />
+      <FeaturedProducts />
     </>
   )
 }

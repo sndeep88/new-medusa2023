@@ -54,20 +54,14 @@ const InfiniteProducts = ({ params }: InfiniteProductsType) => {
   }, [inView, hasNextPage])
 
   return (
-    <div className="flex-1 px-5 sm:px-10">
-      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 flex-1">
+    <div className="container-fluid">
+      <div className="row">
         {previews.map((p) => (
-          <li key={p.id}>
-            <ProductPreview {...p} />
-          </li>
+          <ProductPreview key={p.id} {...p} />
         ))}
         {isLoading &&
           !previews.length &&
-          repeat(8).map((index) => (
-            <li key={index}>
-              <SkeletonProductPreview />
-            </li>
-          ))}
+          repeat(8).map((index) => <SkeletonProductPreview key={index} />)}
         {isFetchingNextPage &&
           // @ts-ignore
           repeat(getNumberOfSkeletons(data?.pages)).map((index) => (
@@ -75,7 +69,7 @@ const InfiniteProducts = ({ params }: InfiniteProductsType) => {
               <SkeletonProductPreview />
             </li>
           ))}
-      </ul>
+      </div>
       <div
         className="py-16 flex justify-center items-center text-small-regular text-gray-700"
         ref={ref}

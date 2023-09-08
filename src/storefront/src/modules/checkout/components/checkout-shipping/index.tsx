@@ -4,8 +4,9 @@ import { Controller, useForm } from "react-hook-form"
 import { formatAmount, useCart, useCartShippingOptions } from "medusa-react"
 import { Cart } from "@medusajs/medusa"
 import { RadioGroup } from "@headlessui/react"
-import { useEffect, useMemo } from "react"
+import { Fragment, useEffect, useMemo } from "react"
 import clsx from "clsx"
+import Radio from "@modules/common/components/radio"
 
 type ShippingOption = {
   value: string
@@ -73,9 +74,9 @@ const CheckoutShipping = ({
   // Memoized shipping method options
   const shippingMethods: ShippingOption[] = useMemo(() => {
     // console.log(shipping_options)
-    console.log(`value: ${Boolean(shipping_options && cart?.region)}`)
+    // console.log(`value: ${Boolean(shipping_options && cart?.region)}`)
     if (shipping_options && cart?.region) {
-      console.log({ shipping_options })
+      // console.log({ shipping_options })
       return shipping_options?.map((option) => ({
         value: option.id,
         label: option.name,
@@ -90,73 +91,63 @@ const CheckoutShipping = ({
   }, [shipping_options, cart])
 
   return (
-    <div>
-      <div className="my-5">
-        <h4 className="text-xl tracking-wider">Shipping Method</h4>
+    <div className="shipping pt-3 pb-4">
+      <h5>Shipping Method</h5>
 
-        <div className="mt-3">
-          <Controller
-            name="soId"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <div>
-                <RadioGroup
-                  value={value}
-                  onChange={(value: string) => handleChange(value, onChange)}
-                >
-                  {shippingMethods && shippingMethods.length
-                    ? shippingMethods.map((option) => {
-                        return (
-                          <RadioGroup.Option
-                            key={option.value}
-                            value={option.value}
+      <Controller
+        name="soId"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <>
+            <RadioGroup
+              value={value}
+              onChange={(value: string) => handleChange(value, onChange)}
+            >
+              {shippingMethods && shippingMethods.length
+                ? shippingMethods.map((option) => {
+                    return (
+                      <RadioGroup.Option
+                        key={option.value}
+                        value={option.value}
+                        className={clsx("pay-item mt-2 mb-4")}
+                      >
+                        {({ checked }) => (
+                          <div
                             className={clsx(
-                              "border rounded-md px-3 py-3 mb-3 text-gray-900",
+                              "w-full pay_label inline-flex items-center relative",
                               {
-                                "bg-blue-100 border border-blue-500 ":
-                                  value === option.value,
-                              },
-                              {
-                                "border-gray-300": value !== option.value,
+                                active: checked,
                               }
                             )}
                           >
-                            <div className="flex justify-between items-center">
-                              <span>{option.label}</span>
-                              <span>{option.price}</span>
-                            </div>
-                          </RadioGroup.Option>
-                        )
-                      })
-                    : null}
-                </RadioGroup>
-              </div>
-            )}
-          />
-        </div>
+                            <span className="absolute w-10 top-1/2 left-4 -translate-y-1/2">
+                              <Radio checked={checked} />
+                            </span>
+                            <label className="flex-1 d-flex align-items-center justify-content-between">
+                              <div>{option.label}</div>
+                              <div>{option.price}</div>
+                            </label>
+                          </div>
+                        )}
+                      </RadioGroup.Option>
+                    )
+                  })
+                : null}
+            </RadioGroup>
+          </>
+        )}
+      />
 
-        <div className="mt-1">
-          <span className="text-red-500 text-sm italic">{errors.soId}</span>
-        </div>
+      <div className="mt-1">
+        <span className="text-red-500 text-sm italic">{errors.soId}</span>
       </div>
 
-      {/* <div className="flex items-center justify-between mt-4">
-        <span
-          onClick={onBack}
-          className="return-link text-blue-500 hover:cursor-pointer"
-        >
-          Return to information
-        </span>
-
-        <Button
-          variant="secondary"
-          className="ml-auto"
-          onClick={onNext}
-          disabled={!isValid || cart.shipping_methods?.length === 0}
-        >
-          Continue to payment
-        </Button>
-      </div> */}
+      <div className="shipping w-100 mb-2 mt-4">
+        <h5>Additional Information (Optional)</h5>
+        <div className="input mt-2 no-placeholder">
+          <input type="text" className="form-control" />
+        </div>
+      </div>
     </div>
   )
 }

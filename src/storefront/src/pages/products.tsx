@@ -12,10 +12,10 @@ const Store: NextPageWithLayout = () => {
   return (
     <>
       <Head title="Store" description="Explore all of our products." />
-      <div className="flex flex-col small:flex-row small:items-start py-6">
+      <section className="product-grid">
         {/* <RefinementList refinementList={params} setRefinementList={setParams} /> */}
         <InfiniteProducts params={params} />
-      </div>
+      </section>
     </>
   )
 }

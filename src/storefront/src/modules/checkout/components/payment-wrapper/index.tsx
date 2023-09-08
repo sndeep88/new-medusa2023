@@ -21,7 +21,7 @@ const Wrapper: React.FC<WrapperProps> = ({ paymentSession, children }) => {
       )
 
     default:
-      return <div>{children}</div>
+      return <>{children}</>
   }
 }
 

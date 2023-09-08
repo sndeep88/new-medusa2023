@@ -25,41 +25,43 @@ const CartTotals: React.FC<CartTotalsProps> = ({ cart }) => {
   }
 
   return (
-    <div>
-      <div className=" text-gray-700">
-        <div className="flex items-center justify-between  text-gray-900 mb-2">
-          <span>Subtotal</span>
-          <span>{getAmount(subtotal)}</span>
-        </div>
-        <div className="flex flex-col gap-y-1">
-          {!!discount_total && (
-            <div className="flex items-center justify-between">
-              <span>Discount</span>
-              <span>- {getAmount(discount_total)}</span>
-            </div>
-          )}
-          {!!gift_card_total && (
-            <div className="flex items-center justify-between">
-              <span>Gift card</span>
-              <span>- {getAmount(gift_card_total)}</span>
-            </div>
-          )}
-          <div className="flex items-center justify-between">
-            <span>Shipping</span>
-            <span>{getAmount(shipping_total)}</span>
-          </div>
-        </div>
+    <>
+      <div className="row mb-2">
+        <span className="col-6">Subtotal</span>
+        <span className="col-6 text-end">
+          <strong>{getAmount(subtotal)}</strong>
+        </span>
+      </div>
 
-        <div className="flex items-center justify-between  text-gray-900 my-2">
-          <span>Total</span>
-          <span>{getAmount(total)}</span>
+      <>
+        {!!discount_total && (
+          <div className="row mb-2">
+            <span>Discount</span>
+            <span>- {getAmount(discount_total)}</span>
+          </div>
+        )}
+        {!!gift_card_total && (
+          <div className="row mb-2">
+            <span>Gift card</span>
+            <span>- {getAmount(gift_card_total)}</span>
+          </div>
+        )}
+        <div className="row mb-2">
+          <span className="col-6">Shipping</span>
+          <span className="col-6 text-end">{getAmount(shipping_total)}</span>
         </div>
-        <div className="flex items-center justify-between text-sm">
-          <span>Taxes</span>
-          <span>{getAmount(tax_total)}</span>
+      </>
+
+      <div className="row mb-2">
+        <div className="col-6">
+          <h5>Total</h5>
+          <small>inc. {getAmount(tax_total)} VAT</small>
+        </div>
+        <div className="col-6 text-end">
+          <h5>{getAmount(total)}</h5>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

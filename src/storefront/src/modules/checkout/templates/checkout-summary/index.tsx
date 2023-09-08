@@ -2,6 +2,7 @@ import { medusaClient } from "@lib/config"
 import CartItems from "@modules/checkout/components/cart-items"
 import Button from "@modules/common/components/button"
 import CartTotals from "@modules/common/components/cart-totals"
+import Input from "@modules/common/components/input"
 import Trash from "@modules/common/icons/trash"
 import { useMutation } from "@tanstack/react-query"
 
@@ -44,15 +45,12 @@ const CheckoutSummary = () => {
     }
   }, [discounts, region])
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<DiscountFormValues>({
-    mode: "onSubmit",
-  })
+  const { register, handleSubmit, setError, formState } =
+    useForm<DiscountFormValues>({
+      mode: "onSubmit",
+    })
 
+  const { isDirty, isValid, errors } = formState
   const onSubmit = (data: DiscountFormValues) => {
     mutate(
       {
@@ -91,57 +89,60 @@ const CheckoutSummary = () => {
   }
 
   return (
-    <div className="w-full px-3 sm:px-5 md:px-10">
+    <div className="checkout-detail right-box-pd">
       {/* items */}
-      <CartItems items={cart.items} region={cart.region} />
+      <div className="product-lists">
+        <CartItems items={cart.items} region={cart.region} />
 
-      <div className="mt-4">
-        {appliedDiscount ? (
-          <div className="flex items-center justify-between">
-            <div>
-              <span>Code: </span>
-              <span className="font-semibold">{appliedDiscount}</span>
+        <>
+          {appliedDiscount ? (
+            <div className="flex items-center justify-between">
+              <div>
+                <span>Code: </span>
+                <span className="font-semibold">{appliedDiscount}</span>
+              </div>
+              <div>
+                <button
+                  className="flex items-center gap-x-2"
+                  onClick={onRemove}
+                  disabled={isLoading}
+                >
+                  <Trash size={16} />
+                  <span className="sr-only">Remove gift card from order</span>
+                </button>
+              </div>
             </div>
-            <div>
-              <button
-                className="flex items-center gap-x-2"
-                onClick={onRemove}
-                disabled={isLoading}
-              >
-                <Trash size={16} />
-                <span className="sr-only">Remove gift card from order</span>
-              </button>
-            </div>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex h-full items-center justify-stretch gap-x-3"
-          >
-            <div className="flex-1">
+          ) : (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="coupon-form form-group d-flex mb-4"
+            >
               <input
                 placeholder="Discount Code"
-                className="px-3 py-[10px] rounded-md border border-gray-200 bg-white flex-1 w-full"
-                {...register("discount_code")}
+                {...register("discount_code", { required: "Required" })}
+                className="form-control me-2"
               />
-              <span className="mt-1">
-                {errors && errors.discount_code && (
-                  <span className="text-red-500 text xs italic">
-                    {errors.discount_code.message}
-                  </span>
-                )}
-              </span>
-            </div>
 
-            <Button type="submit" variant="light">
-              Apply
-            </Button>
-          </form>
-        )}
-      </div>
+              <button
+                type="submit"
+                className="btn btn-sm btn-default"
+                disabled={!isDirty || !isValid}
+              >
+                Apply
+              </button>
+            </form>
+          )}
+        </>
 
-      <div className="mt-3">
-        <CartTotals cart={cart} />
+        <div className="pay">
+          <CartTotals cart={cart} />
+        </div>
+
+        <img
+          src="/assets/images/plugin_settle_info_default.png"
+          alt="why choose"
+          className="mt-4"
+        />
       </div>
     </div>
   )
