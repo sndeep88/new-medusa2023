@@ -1,0 +1,1 @@
+import{a as s,d as i}from"./index-effbfb95.js";import{l as t}from"./lodash-72dfe3e0.js";const m=({views:r,activeView:l=r[0],setActiveView:e})=>s("div",{className:"flex inter-large-semibold gap-x-base text-grey-40",children:r.map((a,o)=>s("div",{className:i("cursor-pointer",{"text-grey-90":a===l}),onClick:()=>{e&&e(a)},children:t.capitalize(a)},o))});export{m as T};

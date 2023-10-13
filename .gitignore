@@ -2,3 +2,6 @@
 src/*/node_modules/
 src/.env
 src/*/.env
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store

@@ -1,0 +1,1 @@
+import{r as s}from"./index-effbfb95.js";function e(a){s.useEffect(()=>{const o=new URL(window.location.href);for(const r of o.searchParams.keys())r in a||o.searchParams.delete(r);for(const r in a)o.searchParams.set(r,a[r].toString());window.history.replaceState(null,"",o.toString())},[a])}export{e as u};

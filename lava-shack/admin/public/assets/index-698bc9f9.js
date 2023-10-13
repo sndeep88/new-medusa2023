@@ -1,0 +1,1 @@
+import{a as r}from"./index-effbfb95.js";import{J as i}from"./index-e0338379.js";import{B as m}from"./body-card-d3fddb8c.js";function n(a){const{title:e,data:t}=a;return t?r(m,{className:"w-full mb-4 min-h-0 h-auto",title:e,children:r("div",{className:"flex flex-grow items-center mt-4",children:r(i,{data:t})})}):null}export{n as R};

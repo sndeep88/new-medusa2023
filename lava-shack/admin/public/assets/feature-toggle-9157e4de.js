@@ -1,0 +1,1 @@
+import{e as n,az as o,a as r,F}from"./index-effbfb95.js";const c=({featureFlag:e,showOnlyWhenDisabled:t=!1,children:a})=>{const{isFeatureEnabled:s}=n.useContext(o);return s(e)===!t?r(F,{children:a}):null};export{c as F};

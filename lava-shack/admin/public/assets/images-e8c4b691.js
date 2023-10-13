@@ -1,0 +1,1 @@
+import{M as p}from"./api-9aff074a.js";const i=t=>{const e=[],a=[];return t.forEach(s=>{s.nativeFile?e.push(s):a.push(s)}),{uploadImages:e,existingImages:a}},r=async t=>{const{uploadImages:e,existingImages:a}=i(t);let s=[];if(e.length>0){const o=e.map(n=>n.nativeFile);s=await p.uploads.create(o).then(({data:n})=>n.uploads)}return[...a,...s]};export{r as p};

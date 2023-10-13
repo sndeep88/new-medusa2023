@@ -1,0 +1,1 @@
+import{l as s}from"./lodash-72dfe3e0.js";function o(r,n){return{...r,path(t){const e=n&&t?`${n}.${t}`:n||t;return"path"in r?r.path(n):e||""},get(t,e){const u=n&&e?`${n}.${e}`:n||e;return"get"in r?r.get(n):u?s.get(t,u):t}}}export{o as n};

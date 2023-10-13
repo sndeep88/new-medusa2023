@@ -1,0 +1,1 @@
+import{r as c,a as e}from"./index-effbfb95.js";import{C as p}from"./react-select-creatable.esm-e43d0869.js";import{u as i,A as m}from"./index-dd953a8b.js";import"./lodash-72dfe3e0.js";const u=c.forwardRef((r,t)=>{const{label:a,helperText:o,required:s,...l}=i(r);return e(m,{label:a,helperText:o,required:s,children:e(p,{ref:t,...l})})});export{u as C};

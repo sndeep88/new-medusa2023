@@ -1,0 +1,15 @@
+{
+  "{{ discountCode }}": "Discount Code",
+  "{{ textDiscount }}": "Discount amount in text format (ex: 10%, $10...)",
+  "{{ first_name }}": "Customer first name",
+  "{{ last_name }}": "Customer last name",
+  "{{ shipping_method }}": "Shipping method",
+  "{{ country }}": "Customer country",
+  "{{ payment_method }}": "Payment method",
+  "{{ order.order_id }}": "Order ID",
+  "{{ order.total }}": "Order total",
+  "{{ order.shipping_address }}": "Shipping address",
+  "{{ order.billing_address }}": "Billing address",
+  "{{ company_address }}": "Company address",
+  "{{ company_name }}": "Company name"
+}
