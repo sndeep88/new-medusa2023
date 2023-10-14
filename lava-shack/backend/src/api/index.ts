@@ -52,9 +52,5 @@ export default (rootDirectory: string): Router | Router[] => {
 	attachStoreRoutes(storeRouter);
 	attachAdminRoutes(adminRouter);
 
-	hooks(router);
-	email(router);
-	sms(router);
-
 	return router;
 };
