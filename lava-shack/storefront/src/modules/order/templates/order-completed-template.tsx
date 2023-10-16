@@ -43,7 +43,7 @@ const OrderCompletedTemplate: React.FC<OrderCompletedTemplateProps> = ({
             <div>
               <h2 className="text-base-semi">Tracking information </h2>
               <Link href={`/tracking/${order.id}`}>
-                <a className="flex items-center justify-center px-5 py-[10px] font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm text-white bg-primary  text-white uppercase text-xl-semi">Go to tracking page</a>
+                <a className="flex items-center justify-center px-5 py-[10px] font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm text-white bg-primary  text-white uppercase text-xl-semi">Click to Track the Order</a>
               </Link>
             </div>
           </div>

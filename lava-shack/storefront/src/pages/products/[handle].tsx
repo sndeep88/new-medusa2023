@@ -78,7 +78,7 @@ const ProductPage: NextPageWithLayout<
   if (isError) {
     replace("/404")
   }
-
+ 
   if (isSuccess) {
     // console.log(data, handle);
     if (isContentView.current == false) {

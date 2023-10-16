@@ -1,6 +1,6 @@
 export const pageview = (options = {}) => {
-  ;(window as any)?.fbq("track", "PageView", options)
-  ;(window as any)?.ttq?.page()
+  ; (window as any)?.fbq("track", "PageView", options)
+    ; (window as any)?.ttq?.page()
 }
 
 export const ggPageview = ({
@@ -10,7 +10,7 @@ export const ggPageview = ({
   tracking_id: string
   url: string
 }) => {
-  ;(window as any).gtag("config", tracking_id, {
+  ; (window as any).gtag("config", tracking_id, {
     page_path: url,
   })
 }
@@ -18,11 +18,13 @@ export const ggPageview = ({
 // https://developers.facebook.com/docs/facebook-pixel/advanced/
 export const trackEvent = (name: string, options = {}) => {
   setTimeout(() => {
-    ;(window as any)?.fbq("track", name, options)
-    ;(window as any)?.ttq?.track(name, options)
+    ; (window as any)?.fbq("track", name, options)
+      ; (window as any)?.ttq?.track(name, options)
     // ;(window as any)?.dataLayer?.push({ event: name, ...options })
-    ;(window as any).gtag("event", name, {
-      ...options,
-    })
-  }, 500)
+    if (typeof (window as any).gtag !== 'undefined') {
+      (window as any)?.gtag("event", name, {
+        ...options,
+      })
+    }
+  }, 1000)
 }

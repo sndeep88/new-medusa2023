@@ -65,7 +65,7 @@ const Nav = ({ storeData }: { storeData?: any }) => {
   return (
     <header>
       <div className="annoncement-bar text-center text-white !bg-black">
-        FREE SHIPPING ON ALL ORDERS OF THIS WEEK 
+        FREE SHIPPING ON ALL ORDERS THIS WEEK
       </div>
 
       <nav

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
 import moment from "moment"
+import _ from "lodash"
 
 export default function CheckoutButton() {
   const [notReady, setNotReady] = useState(true)
@@ -23,8 +24,14 @@ export default function CheckoutButton() {
     completeCheckout: { mutateAsync: completeCart },
   } = useCart()
 
-  const { getValues, formState, watch } = useFormContext<CheckoutFormValues>()
-  const [expMon, expYear] = watch(["card_expMon", "card_expYear"])
+  const { getValues, formState, watch, handleSubmit } =
+    useFormContext<CheckoutFormValues>()
+  const [expMon, expYear, cardNumber, cardCvc] = watch([
+    "card_expMon",
+    "card_expYear",
+    "card_number",
+    "card_cvc",
+  ])
 
   const { isDirty, isValid, errors } = formState
   useEffect(() => {
@@ -72,7 +79,7 @@ export default function CheckoutButton() {
   }, [cart, isDirty, isValid, expMon, expYear])
 
   const [submitting, setSubmitting] = useState(false)
-  const { handleSubmit, setAddresses, mpay, cardElementId } = useCheckout()
+  const { setAddresses, mpay, cardElementId } = useCheckout()
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
@@ -82,29 +89,42 @@ export default function CheckoutButton() {
 
   const handleCheckout = async (ev: React.MouseEvent) => {
     // console.log({ cart })
-    trackEvent("Purchase", {
-      currency: cart?.region.currency_code.toUpperCase(),
-      value: cart?.total,
-      description: "purchase order",
-      content_type: "product",
-      quantity: cart?.items.length,
-      content_ids: cart?.items.map((line) => line.variant_id),
-      contents: cart?.items.map((item) => ({
-        content_id: item.variant_id,
-        content_name: item.variant.title,
-        quantity: item.quantity,
-        price: item.unit_price,
-      })),
-    })
+    // trackEvent("Purchase", {
+    //   currency: cart?.region.currency_code.toUpperCase(),
+    //   value: (cart?.total || 0) / 100,
+    //   description: "purchase order",
+    //   content_type: "product",
+    //   quantity: cart?.items.length,
+    //   content_ids: cart?.items.map((line) => line.variant_id),
+    //   contents: cart?.items.map((item) => ({
+    //     content_id: item.variant_id,
+    //     content_name: item.variant.title,
+    //     quantity: item.quantity,
+    //     price: item.unit_price / 100,
+    //   })),
+    // })
 
     setErrorMessage(undefined)
     setSubmitting(true)
 
-    await handleSubmit(setAddresses)(ev)
+    try {
+      await handleSubmit(setAddresses)()
+    } catch (err) {
+      console.log({ err })
+      // setErrorMessage(err.message)
+      setSubmitting(false)
+      return
+    }
 
     if (mpay.implementDirect) {
       const cardInfo = getValues()
       // console.log({ cardInfo })
+
+      if (!cardInfo.card_number || !cardInfo.card_cvc) {
+        setSubmitting(false)
+        setErrorMessage("Please check the card details and try again.")
+        return
+      }
 
       const verifiedCard = await fetch("/api/verify-card", {
         method: "POST",
@@ -130,7 +150,10 @@ export default function CheckoutButton() {
           return
         }
 
-        setErrorMessage(verifiedCard?.error?.message ?? "Please check the card details and try again.")
+        setErrorMessage(
+          verifiedCard?.error?.message ??
+            "Please check the card details and try again."
+        )
         // setErrorMessage("Please check the card details and Try again.")
         setSubmitting(false)
         return
@@ -181,6 +204,7 @@ export default function CheckoutButton() {
           }
         } else {
           setErrorMessage(data.error.message)
+          setSubmitting(false)
         }
       })
     }
@@ -193,7 +217,7 @@ export default function CheckoutButton() {
       <div className="text-end pt-2 pb-2">
         <button
           onClick={handleCheckout}
-          disabled={notReady || submitting}
+          disabled={submitting}
           className="btn btn-default btn-lg w-100 w-md-auto flex justify-center"
         >
           {submitting ? <Spinner size={24} /> : "Pay Now"}

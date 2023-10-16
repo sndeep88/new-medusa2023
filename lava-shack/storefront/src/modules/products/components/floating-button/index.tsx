@@ -23,7 +23,7 @@ export default function FloatingButton({ product }: { product: Product }) {
   const router = useRouter()
 
   const buynow = async () => {
-    trackEvent("Checkout", { product_id: product.id, variant_id: variant?.id })
+    // trackEvent("Checkout", { product_id: product.id, variant_id: variant?.id })
     if (!variant) return
 
     await createBuynowCart()

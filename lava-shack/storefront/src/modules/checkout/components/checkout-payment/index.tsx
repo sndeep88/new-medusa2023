@@ -7,9 +7,10 @@ import BillingAddress from "../billing_address"
 import PaymentButton from "../payment-button"
 import { formatAmount } from "medusa-react"
 import { RadioGroup } from "@headlessui/react"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import clsx from "clsx"
 import CheckoutButton from "../checkout-button"
+import { PaymentService } from "@medusajs/medusa/dist/services"
 
 const CheckoutPayment = ({
   cart,
@@ -42,6 +43,11 @@ const CheckoutPayment = ({
     }
   }, [cart])
 
+  const paymentSession = useMemo(() => {
+    if (!cart || !cart.payment_session) return undefined
+    return cart.payment_session
+  }, [cart])
+
   return (
     <div className="step_3">
       <div className="shipping pb-2">
@@ -49,45 +55,39 @@ const CheckoutPayment = ({
         <p className="m-0">All transactions are secure and encrypted.</p>
       </div>
 
-      {showPaymentSelect.error && (
+      {/* {showPaymentSelect.error && (
         <div className="alert alert-danger mt-3 mb-0">
           {showPaymentSelect.error}
         </div>
-      )}
+      )} */}
 
-      {showPaymentSelect.show && (
-        <div className="pay_option mb-4">
-          {cart?.payment_sessions.length ? (
-            cart.payment_sessions
-              .sort((a, b) => {
-                return a.provider_id > b.provider_id ? 1 : -1
-              })
-              .map((paymentSession) => {
-                return (
-                  <PaymentContainer
-                    paymentSession={paymentSession}
-                    key={paymentSession.id}
-                    selected={
-                      cart?.payment_session?.provider_id ===
-                      paymentSession.provider_id
-                    }
-                    setSelected={() => {
-                      // console.log({ prodider_id: paymentSession.provider_id })
-                      setPaymentSession(paymentSession.provider_id)
-                    }}
-                    setDone={setDone}
-                  />
-                )
-              })
-          ) : (cart.total ?? 0) > 0 ? (
-            <div className="flex flex-col items-center justify-center px-4 py-16 text-gray-900">
-              <Spinner />
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      )}
+      {/* {showPaymentSelect.show && ( */}
+      <div className="pay_option mb-4">
+        {/* {cart?.payment_sessions.length ? (
+          cart.payment_sessions
+            .sort((a, b) => {
+              return a.provider_id > b.provider_id ? 1 : -1
+            })
+            .map((paymentSession) => {
+              return ( */}
+        {paymentSession && (
+          <PaymentContainer
+            paymentSession={paymentSession}
+            key={paymentSession.id}
+            setDone={setDone}
+          />
+        )}
+        {/* )
+            })
+        ) : (cart.total ?? 0) > 0 ? (
+          <div className="flex flex-col items-center justify-center px-4 py-16 text-gray-900">
+            <Spinner />
+          </div>
+        ) : (
+          <></>
+        )} */}
+      </div>
+      {/* )} */}
 
       <div className="billing pay_option pt-3 mb-4">
         <h5 className="mb-0">Billing Address</h5>

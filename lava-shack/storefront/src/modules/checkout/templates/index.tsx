@@ -28,17 +28,22 @@ const CheckoutTemplate = ({
   const first = useRef(true)
 
   useEffect(() => {
+    if(!cart) return;
+    if(!first.current) return;
+    first.current = false;
+    
     trackEvent("AddToCart", {
       content_ids: cart?.items.map((line) => line.variant_id),
       contents: cart?.items.map((item) => ({
+        id: item.variant_id,
         content_id: item.variant_id,
         content_name: item.variant.title,
         quantity: item.quantity,
-        price: item.unit_price,
+        price: item.unit_price / 100,
       })),
       content_type: "product",
       currency: cart?.region?.currency_code.toUpperCase(),
-      value: cart?.total,
+      value: (cart?.total || 0) / 100,
       num_items: cart?.items.length,
       description: "add to cart",
     })
@@ -46,14 +51,14 @@ const CheckoutTemplate = ({
       content_id: cart?.id,
       content_type: "product",
       currency: cart?.region?.currency_code.toUpperCase(),
-      value: cart?.total,
+      value: (cart?.total || 0) / 100,
       num_items: cart?.items.length,
     })
 
     return () => {
       resetCart()
     }
-  }, [])
+  }, [cart])
 
   return !cart ? null : (
     <CheckoutProvider

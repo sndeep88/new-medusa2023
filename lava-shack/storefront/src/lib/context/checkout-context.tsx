@@ -51,6 +51,7 @@ export type CheckoutFormValues = {
   card_expMon: string
   card_expYear: string
   card_cvc: string
+  selectMethod: "inline" | "direct"
 }
 
 export type CardInfomation = {
@@ -318,56 +319,56 @@ export const CheckoutProvider = ({
     error: "Please enter an email address to see payment options.",
   })
   const { watch, handleSubmit } = methods
-  useEffect(() => {
-    let timeout: any = undefined
-    const sub = watch((value, { name, type }) => {
-      // console.log({ value, name, type })
-      if (name === "email") {
-        // console.log({ email: value.email })
+  // useEffect(() => {
+  //   let timeout: any = undefined
+  //   const sub = watch((value, { name, type }) => {
+  //     // console.log({ value, name, type })
+  //     if (name === "email") {
+  //       // console.log({ email: value.email })
 
-        var paymentSession = cart?.payment_session ?? {}
-        // console.log({ showPaymentSelect, paymentSession })
-        if (!_.isEmpty(paymentSession) || _.isEmpty(cart?.payment_sessions)) {
-          // console.log("run timeout", showPaymentSelect)
-          timeout = setTimeout(async () => {
-            console.log("run here")
-            if (cart?.payment_session?.provider_id) {
-              await deletepaymentSession({
-                provider_id: cart?.payment_session?.provider_id ?? "",
-              })
-            }
-            const paymentSession = await createPaymentSessions(cart?.id ?? "")
+  //       var paymentSession = cart?.payment_session ?? {}
+  //       // console.log({ showPaymentSelect, paymentSession })
+  //       if (!_.isEmpty(paymentSession) || _.isEmpty(cart?.payment_sessions)) {
+  //         // console.log("run timeout", showPaymentSelect)
+  //         timeout = setTimeout(async () => {
+  //           console.log("run here")
+  //           if (cart?.payment_session?.provider_id) {
+  //             await deletepaymentSession({
+  //               provider_id: cart?.payment_session?.provider_id ?? "",
+  //             })
+  //           }
+  //           const paymentSession = await createPaymentSessions(cart?.id ?? "")
 
-            if (paymentSession) {
-              setCart(paymentSession)
-              // console.log("set payment session")
+  //           if (paymentSession) {
+  //             setCart(paymentSession)
+  //             // console.log("set payment session")
 
-              setShowPaymentSelect({
-                show: !!value.email,
-                error: !!value.email
-                  ? undefined
-                  : "Please enter an email address to see payment options.",
-              })
-            }
-          }, 700)
-        }
-      } else {
-        setShowPaymentSelect({
-          show: !!value.email,
-          error: !!value.email
-            ? undefined
-            : "Please enter an email address to see payment options.",
-        })
-      }
-    })
+  //             setShowPaymentSelect({
+  //               show: !!value.email,
+  //               error: !!value.email
+  //                 ? undefined
+  //                 : "Please enter an email address to see payment options.",
+  //             })
+  //           }
+  //         }, 700)
+  //       }
+  //     } else {
+  //       setShowPaymentSelect({
+  //         show: !!value.email,
+  //         error: !!value.email
+  //           ? undefined
+  //           : "Please enter an email address to see payment options.",
+  //       })
+  //     }
+  //   })
 
-    return () => {
-      sub.unsubscribe()
-      if (timeout) {
-        clearTimeout(timeout)
-      }
-    }
-  }, [cart, watch])
+  //   return () => {
+  //     sub.unsubscribe()
+  //     if (timeout) {
+  //       clearTimeout(timeout)
+  //     }
+  //   }
+  // }, [cart, watch])
 
   const setPaymentSession = async (providerId: string) => {
     if (cart) {
@@ -634,5 +635,6 @@ const mapFormValues = (
     card_number: "",
     card_expMon: (new Date().getMonth() + 1).toString().padStart(2, "0"),
     card_expYear: new Date().getFullYear().toString(),
+    selectMethod: "inline",
   }
 }

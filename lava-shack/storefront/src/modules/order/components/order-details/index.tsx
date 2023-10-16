@@ -1,7 +1,7 @@
 import { trackEvent } from "@lib/pixel"
 import { Order } from "@medusajs/medusa"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 type OrderDetailsProps = {
   order: Order
@@ -11,25 +11,36 @@ type OrderDetailsProps = {
 const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
   const [loaded, setLoaded] = useState(false)
 
+  const first = useRef(true);
+
   useEffect(() => {
+    if(!order) return;
+    if(!first.current) return;
+    first.current = false;
+
     setTimeout(() => {
       trackEvent("Purchase", {
         content_ids: order.items.map((i) => i.variant_id),
         contents: order.items.map(item => ({
+          id: item.variant_id,
           product_id: item.variant_id,
           content_id: item.variant_id,
-          content_name: item.title, 
-          quantity: item.quantity,  
-          price: item.unit_price,
+          content_name: item.title,
+          quantity: item.quantity,
+          currency: (order as any)?.currency_code.toUpperCase() ?? "USD",
+          price: item.unit_price / 100,
+          value: item.unit_price / 100,
+          description: item.title,
+          content_type: "product",
         })),
         content_type: "product",
         description: "purchase order",
         num_items: order.items.length,
         currency: (order as any)?.currency_code.toUpperCase() ?? "USD",
-        value: (order as any)?.total ?? 0,
+        value: ((order as any)?.total / 100) ?? 0,
       })
-    }, 1000)
-  }, [])
+    }, 500)
+  }, [order])
 
   const items = order.items.reduce((acc, i) => acc + i.quantity, 0)
 

@@ -28,6 +28,7 @@ const CheckoutShipping = ({
     control,
     setError,
     formState: { errors },
+    setValue,
   } = useForm<ShippingFormProps>({
     defaultValues: {
       soId: cart.shipping_methods?.[0]?.shipping_option_id,
@@ -89,6 +90,16 @@ const CheckoutShipping = ({
 
     return []
   }, [shipping_options, cart])
+
+  useEffect(() => {
+    if (!shippingMethods || !shippingMethods.length) return
+    if (cart.shipping_methods && cart.shipping_methods.length) return
+
+    const soId = shippingMethods[0].value
+    handleChange(soId, (value) => {
+      setValue("soId", value)
+    })
+  }, [shippingMethods])
 
   return (
     <div className="shipping pt-3 pb-4">

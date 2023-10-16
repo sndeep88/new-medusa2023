@@ -18,7 +18,7 @@ const ProductPreview = ({
   const router = useRouter()
 
   const buynow = async () => {
-    trackEvent("Checkout", { handle: handle, variant_id: variant?.id })
+    // trackEvent("Checkout", { handle: handle, variant_id: variant?.id })
     // console.log("buy now", { variant })
     if (!variant) return
 

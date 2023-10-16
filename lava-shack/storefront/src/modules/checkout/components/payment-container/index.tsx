@@ -10,8 +10,6 @@ import PaymentSquare from "../payment-square"
 
 type PaymentContainerProps = {
   paymentSession: PaymentSession
-  selected: boolean
-  setSelected: () => void
   disabled?: boolean
   setDone: (val: boolean) => void
 }
@@ -45,81 +43,74 @@ const PaymentInfoMap: Record<string, { title: string; description: string }> = {
 
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
   paymentSession,
-  selected,
-  setSelected,
   disabled = false,
   setDone,
 }) => {
   return (
-    <div
-      className={clsx("pay-item", {
-        ["active"]: selected,
-      })}
-    >
-      <div
-        className="pay_label w-full inline-flex items-center relative"
-        onClick={setSelected}
-      >
-        <span className="absolute w-10 top-4 left-4">
-          <Radio checked={selected} />
-        </span>
-
-        <label className="flex-1 d-flex align-items-center justify-content-between flex-wrap">
-          <div className="flex flex-col text-left">
-            <h3 className="text-base-semi leading-none text-gray-900">
-              {PaymentInfoMap[paymentSession.provider_id].title}
-            </h3>
-            <span className="text-gray-700 text-small-regular">
-              {PaymentInfoMap[paymentSession.provider_id].description}
-            </span>
-          </div>
-
-          <div className="payment-icon text-md-end inline-flex items-center gap-x-1 ">
-            <Image
-              src="/assets/images/american_express.svg"
-              alt="samerican_express"
-              height={22}
-              width={35}
-            />
-            <Image
-              src="/assets/images/diners_club.svg"
-              alt="diners_club"
-              height={22}
-              width={35}
-            />
-            <Image
-              src="/assets/images/discover.svg"
-              alt="discover"
-              height={22}
-              width={35}
-            />
-            <Image
-              src="/assets/images/jcb.svg"
-              alt="jcb"
-              height={22}
-              width={35}
-            />
-            <Image
-              src="/assets/images/master.svg"
-              alt="master"
-              height={22}
-              width={35}
-            />
-            <Image
-              src="/assets/images/visa.svg"
-              alt="visa"
-              height={22}
-              width={35}
-            />
-          </div>
-        </label>
-      </div>
-
-      {selected && (
-        <div className="pay-content p-3">
-          <PaymentElement paymentSession={paymentSession} setDone={setDone} />
+    <div className={clsx("pay-item active")}>
+      <>
+        <div
+          className="pay_label w-full inline-flex items-center relative"
+          // onClick={setSelectMethod}
+        >
+          <span className="absolute w-10 top-1/2 left-4 -translate-y-1/2">
+            <Radio checked={true} />
+          </span>
+          <label className="flex-1 d-flex align-items-center justify-content-between flex-wrap">
+            <div className="flex flex-col text-left">
+              <h3 className="text-base-semi leading-none text-gray-900">
+                {PaymentInfoMap[paymentSession.provider_id].title}
+              </h3>
+              <span className="text-gray-700 text-small-regular">
+                {PaymentInfoMap[paymentSession.provider_id].description}
+              </span>
+            </div>
+            <div className="payment-icon text-md-end inline-flex items-center gap-x-1 ">
+              <Image
+                src="/assets/images/american_express.svg"
+                alt="samerican_express"
+                height={22}
+                width={35}
+              />
+              <Image
+                src="/assets/images/diners_club.svg"
+                alt="diners_club"
+                height={22}
+                width={35}
+              />
+              <Image
+                src="/assets/images/discover.svg"
+                alt="discover"
+                height={22}
+                width={35}
+              />
+              <Image
+                src="/assets/images/jcb.svg"
+                alt="jcb"
+                height={22}
+                width={35}
+              />
+              <Image
+                src="/assets/images/master.svg"
+                alt="master"
+                height={22}
+                width={35}
+              />
+              <Image
+                src="/assets/images/visa.svg"
+                alt="visa"
+                height={22}
+                width={35}
+              />
+            </div>
+          </label>
         </div>
-      )}
+        {/* {checked && ( */}
+        <div className="pay-content p-3">
+          <PaymentMyUser setDone={setDone} />
+        </div>
+        {/* )} */}
+      </>
     </div>
   )
 }

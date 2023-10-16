@@ -54,13 +54,13 @@ const Payment = () => {
                 <PaymentContainer
                   paymentSession={paymentSession}
                   key={paymentSession.id}
-                  selected={
-                    cart?.payment_session?.provider_id ===
-                    paymentSession.provider_id
-                  }
-                  setSelected={() =>
-                    setPaymentSession(paymentSession.provider_id)
-                  }
+                  // selected={
+                  //   cart?.payment_session?.provider_id ===
+                  //   paymentSession.provider_id
+                  // }
+                  // setSelected={() =>
+                  //   setPaymentSession(paymentSession.provider_id)
+                  // }
                   setDone={() => {}}
                 />
               )

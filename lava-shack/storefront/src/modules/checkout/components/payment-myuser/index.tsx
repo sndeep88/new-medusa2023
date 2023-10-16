@@ -107,7 +107,7 @@ const PaymentMyUser = ({ setDone }: { setDone: (val: boolean) => void }) => {
 
   return (
     <div className="row mt-2">
-      {mpay?.implementDirect ? (
+      {mpay?.implementDirect && (
         <>
           <div className="col-md-12 mb-2 relative">
             <Controller
@@ -214,12 +214,11 @@ const PaymentMyUser = ({ setDone }: { setDone: (val: boolean) => void }) => {
             />
           </div>
         </>
-      ) : null}
-
+      )}
       <div
         className={clsx(
           "py-1 pb-2",
-          mpay && mpay.implementDirect ? "hidden" : "visible"
+          mpay && !mpay.implementDirect ? "visible" : "hidden"
         )}
       >
         <div
